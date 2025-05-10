@@ -19,10 +19,10 @@ public class GUI extends JFrame {
     boolean dHitter = false;
 
     //card list
-    ArrayList<Card> Cards = new ArrayList<Card>();
+    ArrayList<Card> Cards = new ArrayList<> ( );
 
     //list of messages
-    ArrayList<Message> Log = new ArrayList<Message>();
+    ArrayList<Message> Log = new ArrayList<> ( );
 
     //fonts
     Font fontCard = new Font("Times New Roman", Font.PLAIN, 40);
@@ -35,8 +35,8 @@ public class GUI extends JFrame {
     Color cPlayer = new Color(255,255,255);
 
     //strings used
-    String questHitStay = new String("Hit or Stand?");
-    String questPlayMore = new String("Play more?");
+    String questHitStay = "Hit or Stand?";
+    String questPlayMore = "Play more?";
 
     //colors used
     Color colorBackground = new Color(113,122,119);
@@ -64,8 +64,8 @@ public class GUI extends JFrame {
     //card spacing and dimensions
     int spacing = 10;
     int rounding = 10;
-    int tCardW = (int) gridW/6;
-    int tCardH = (int) gridH/2;
+    int tCardW = gridW /6;
+    int tCardH = gridH /2;
     int cardW = tCardW - spacing*2;
     int cardH = tCardH - spacing*2;
 
@@ -75,8 +75,8 @@ public class GUI extends JFrame {
     boolean play_more_q = false;
 
     //player and dealer card array
-    ArrayList<Card> pCards = new ArrayList<Card>();
-    ArrayList<Card> dCards = new ArrayList<Card>();
+    ArrayList<Card> pCards = new ArrayList<> ( );
+    ArrayList<Card> dCards = new ArrayList<> ( );
 
     //player and dealer totals
     int pMinTotal = 0;
@@ -99,10 +99,10 @@ public class GUI extends JFrame {
         this.setContentPane(board);
         board.setLayout(null);
 
-        Move move = new Move();
+        Move move = new Move ( );
         this.addMouseMotionListener(move);
 
-        Click click = new Click();
+        Click click = new Click ( );
         this.addMouseListener(click);
 
         //button stuff
@@ -139,7 +139,7 @@ public class GUI extends JFrame {
         board.add(bNo);
 
         //creating all cards
-        String temp_str = "starting_temp_str_name";
+        String temp_str;
         for (int i = 0; i < 52; i++) {
             if (i % 4 == 0) {
                 temp_str = "Spades";
@@ -147,7 +147,7 @@ public class GUI extends JFrame {
                 temp_str = "Hearts";
             } else if (i % 4 == 2) {
                 temp_str = "Diamonds";
-            } else if (i % 4 == 3) {
+            } else {
                 temp_str = "Clubs";
             }
             Cards.add(new Card((i/4) + 1, temp_str, i));
@@ -158,24 +158,21 @@ public class GUI extends JFrame {
         pCards.add(Cards.get(tempC));
         Cards.get(tempC).setUsed();
 
-        tempC = rand.nextInt(52);
-        while (Cards.get(tempC).used == true) {
-            tempC = rand.nextInt(52);
-        }
+        do {
+            tempC = rand.nextInt (52);
+        } while (Cards.get (tempC).used);
         dCards.add(Cards.get(tempC));
         Cards.get(tempC).setUsed();
 
-        tempC = rand.nextInt(52);
-        while (Cards.get(tempC).used == true) {
-            tempC = rand.nextInt(52);
-        }
+        do {
+            tempC = rand.nextInt (52);
+        } while (Cards.get (tempC).used);
         pCards.add(Cards.get(tempC));
         Cards.get(tempC).setUsed();
 
-        tempC = rand.nextInt(52);
-        while (Cards.get(tempC).used == true) {
-            tempC = rand.nextInt(52);
-        }
+        do {
+            tempC = rand.nextInt (52);
+        } while (Cards.get (tempC).used);
         dCards.add(Cards.get(tempC));
         Cards.get(tempC).setUsed();
     }
@@ -192,7 +189,7 @@ public class GUI extends JFrame {
         for (Card c : pCards) {
             pMinTotal += c.value;
             pMaxTotal += c.value;
-            if (c.name == "Ace")
+            if (Objects.equals (c.name, "Ace"))
                 acesCount++;
 
         }
@@ -207,7 +204,7 @@ public class GUI extends JFrame {
         for (Card c : dCards) {
             dMinTotal += c.value;
             dMaxTotal += c.value;
-            if (c.name == "Ace")
+            if (Objects.equals (c.name, "Ace"))
                 acesCount++;
 
         }
@@ -217,8 +214,8 @@ public class GUI extends JFrame {
     }
 
     public void setWinner() {
-        int pPoints = 0;
-        int dPoints = 0;
+        int pPoints;
+        int dPoints;
 
         if (pMaxTotal > 21) {
             pPoints = pMinTotal;
@@ -253,14 +250,14 @@ public class GUI extends JFrame {
     public void dealerHitStay() {
         dHitter = true;
 
-        int dAvailable = 0;
+        int dAvailable;
         if (dMaxTotal > 21) {
             dAvailable = dMinTotal;
         } else {
             dAvailable = dMaxTotal;
         }
 
-        int pAvailable = 0;
+        int pAvailable;
         if (pMaxTotal > 21) {
             pAvailable = pMinTotal;
         } else {
@@ -272,33 +269,31 @@ public class GUI extends JFrame {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         if ((dAvailable < pAvailable && pAvailable <= 21) || dAvailable < 16) {
-            int tempMax = 0;
+            int tempMax;
             if (dMaxTotal <= 21) {
                 tempMax = dMaxTotal;
             } else {
                 tempMax = dMinTotal;
             }
-            String mess = ("Dealer decided to hit! (total: " + Integer.toString(tempMax) + ")");
+            String mess = ("Dealer decided to hit! (total: " + tempMax + ")");
             Log.add(new Message(mess, "Dealer"));
-            tempC = rand.nextInt(52);
-            while (Cards.get(tempC).used == true) {
-                tempC = rand.nextInt(52);
-            }
+            do {
+                tempC = rand.nextInt (52);
+            } while (Cards.get (tempC).used);
             dCards.add(Cards.get(tempC));
             Cards.get(tempC).setUsed();
             } else {
-            int tempMax = 0;
+            int tempMax;
             if (dMaxTotal <= 21) {
                 tempMax = dMaxTotal;
             } else {
                 tempMax = dMinTotal;
             }
-            String mess = ("Dealer decided to stand! (total: " + Integer.toString(tempMax) + ")");
+            String mess = ("Dealer decided to stand! (total: " + tempMax + ")");
             Log.add(new Message(mess, "Dealer"));
             setWinner();
             dealer_turn = false;
@@ -309,7 +304,7 @@ public class GUI extends JFrame {
 
     public void refresher() {
 
-        if (hit_stay_q == true) {
+        if (hit_stay_q) {
             bHit.setVisible(true);
             bStay.setVisible(true);
         } else {
@@ -317,12 +312,12 @@ public class GUI extends JFrame {
             bStay.setVisible(false);
         }
 
-        if (dealer_turn == true) {
-            if (dHitter == false)
+        if (dealer_turn) {
+            if (!dHitter)
                 dealerHitStay();
         }
 
-        if (play_more_q == true) {
+        if (play_more_q) {
             bYes.setVisible(true);
             bNo.setVisible(true);
         } else {
@@ -332,27 +327,27 @@ public class GUI extends JFrame {
 
         totalsChecker();
 
-        if ((pMaxTotal == 21 || pMinTotal >= 21) && hit_stay_q == true) {
-            int tempMax = 0;
+        if ((pMaxTotal == 21 || pMinTotal >= 21) && hit_stay_q) {
+            int tempMax;
             if (pMaxTotal <= 21) {
                 tempMax = pMaxTotal;
             } else {
                 tempMax = pMinTotal;
             }
-            String mess = ("Pass (total: " + Integer.toString(tempMax) + ")");
+            String mess = ("Pass (total: " + tempMax + ")");
             Log.add(new Message(mess, "Player"));
             hit_stay_q = false;
             dealer_turn = true;
         }
 
-        if ((dMaxTotal == 21 || dMinTotal >= 21) && dealer_turn == true) {
-            int tempMax = 0;
+        if ((dMaxTotal == 21 || dMinTotal >= 21) && dealer_turn) {
+            int tempMax;
             if (dMaxTotal <= 21) {
                 tempMax = dMaxTotal;
             } else {
                 tempMax = dMinTotal;
             }
-            String mess = ("Dealer Pass!(total: " + Integer.toString(tempMax) + ")");
+            String mess = ("Dealer Pass!(total: " + tempMax + ")");
             Log.add(new Message(mess, "Dealer"));
             setWinner();
             dealer_turn = false;
@@ -370,7 +365,7 @@ public class GUI extends JFrame {
             g.fillRect(0, 0, aW, aH);
 
             //questions
-            if (hit_stay_q == true) {
+            if (hit_stay_q) {
                 g.setColor(Color.black);
                 g.setFont(fontQuest);
                 g.drawString(questHitStay, gridX+gridW+60, gridY+90);
@@ -378,11 +373,11 @@ public class GUI extends JFrame {
                 if (pMinTotal == pMaxTotal) {
                     g.drawString(Integer.toString(pMaxTotal), gridX+gridW+60, gridY+350);
                 } else if (pMaxTotal <= 21) {
-                    g.drawString(Integer.toString(pMinTotal) + " or " + Integer.toString(pMaxTotal), gridX+gridW+60, gridY+350);
+                    g.drawString(pMinTotal + " or " + pMaxTotal, gridX+gridW+60, gridY+350);
                 } else {
                     g.drawString(Integer.toString(pMinTotal), gridX+gridW+60, gridY+350);
                 }
-            } else if (play_more_q == true) {
+            } else if (play_more_q) {
                 g.setColor(Color.black);
                 g.setFont(fontQuest);
                 g.drawString(questPlayMore, gridX+gridW+70, gridY+490);
@@ -407,7 +402,7 @@ public class GUI extends JFrame {
             //score
             g.setColor(Color.BLACK);
             g.setFont(fontQuest);
-            String score = ("Score: " + Integer.toString(Main.pWins) + " - " + Integer.toString(Main.dWins));
+            String score = ("Score: " + Main.pWins + " - " + Main.dWins);
             g.drawString(score, gridX+gridW+70, gridY+gridH+300);
 
             //player cards
@@ -459,7 +454,7 @@ public class GUI extends JFrame {
                 index++;
             }
 
-            if (dealer_turn == true || play_more_q == true) {
+            if (dealer_turn || play_more_q) {
                 //dealer cards
                 index = 0;
                 for (Card c : dCards) {
@@ -529,51 +524,44 @@ public class GUI extends JFrame {
 
     }
 
-    public class Move implements MouseMotionListener {
+    public static class Move implements MouseMotionListener {
 
         @Override
         public void mouseDragged(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void mouseMoved(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
     }
 
-    public class Click implements MouseListener {
+    public static class Click implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void mouseEntered(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void mouseExited(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void mousePressed(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void mouseReleased(MouseEvent arg0) {
-            // TODO Auto-generated method stub
 
         }
 
@@ -583,21 +571,20 @@ public class GUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (hit_stay_q == true) {
+            if (hit_stay_q) {
 
-                int tempMax = 0;
+                int tempMax;
                 if (pMaxTotal <= 21) {
                     tempMax = pMaxTotal;
                 } else {
                     tempMax = pMinTotal;
                 }
-                String mess = ("You decided to hit! (total: " + Integer.toString(tempMax) + ")");
+                String mess = ("You decided to hit! (total: " + tempMax + ")");
                 Log.add(new Message(mess, "Player"));
 
-                tempC = rand.nextInt(52);
-                while (Cards.get(tempC).used == true) {
-                    tempC = rand.nextInt(52);
-                }
+                do {
+                    tempC = rand.nextInt (52);
+                } while (Cards.get (tempC).used);
                 pCards.add(Cards.get(tempC));
                 Cards.get(tempC).setUsed();
                 }
@@ -609,15 +596,15 @@ public class GUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (hit_stay_q == true) {
+            if (hit_stay_q) {
 
-                int tempMax = 0;
+                int tempMax;
                 if (pMaxTotal <= 21) {
                     tempMax = pMaxTotal;
                 } else {
                     tempMax = pMinTotal;
                 }
-                String mess = ("You decided to stay! (total: " + Integer.toString(tempMax) + ")");
+                String mess = ("You decided to stay! (total: " + tempMax + ")");
                 Log.add(new Message(mess, "Player"));
 
                 hit_stay_q = false;
@@ -647,24 +634,21 @@ public class GUI extends JFrame {
             pCards.add(Cards.get(tempC));
             Cards.get(tempC).setUsed();
 
-            tempC = rand.nextInt(52);
-            while (Cards.get(tempC).used == true) {
-                tempC = rand.nextInt(52);
-            }
+            do {
+                tempC = rand.nextInt (52);
+            } while (Cards.get (tempC).used);
             dCards.add(Cards.get(tempC));
             Cards.get(tempC).setUsed();
 
-            tempC = rand.nextInt(52);
-            while (Cards.get(tempC).used == true) {
-                tempC = rand.nextInt(52);
-            }
+            do {
+                tempC = rand.nextInt (52);
+            } while (Cards.get (tempC).used);
             pCards.add(Cards.get(tempC));
             Cards.get(tempC).setUsed();
 
-            tempC = rand.nextInt(52);
-            while (Cards.get(tempC).used == true) {
-                tempC = rand.nextInt(52);
-            }
+            do {
+                tempC = rand.nextInt (52);
+            } while (Cards.get (tempC).used);
             dCards.add(Cards.get(tempC));
             Cards.get(tempC).setUsed();
 
