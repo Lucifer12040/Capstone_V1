@@ -35,11 +35,17 @@ Some logic and UI structuring are also inspired by past projects and personal ex
 The project is organized into multiple Java classes that keep logic modular and readable:
 BlackJack/
 │
+
 ├── Card.java # Handles individual card properties (suit, rank, value)
+
 ├── Deck.java # Manages a deck of 52 cards and shuffling logic
+
 ├── Hand.java # Represents the player's or dealer's hand
+
 ├── GameLogic.java # Contains win/lose condition checks and total calculations
+
 ├── GameGUI.java # The Swing interface with all buttons, visuals, and labels
+
 └── Main.java # Entry point that safely launches the GUI
 
 
